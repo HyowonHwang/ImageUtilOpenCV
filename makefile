@@ -5,6 +5,7 @@ SRC := main.cpp \
 			mat_operator.cpp \
 			read_image.cpp \
 			read_video.cpp \
+			histogram.cpp \
 			scalar_test.cpp 
 
 main:

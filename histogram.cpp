@@ -3,30 +3,44 @@
 #include <opencv2/opencv.hpp>
 #include "histogram.h"
 
-void put_string(cv::Mat &frame, std::string text, cv::Point pt, int value) {
-		text += std::to_string(value);
+void calc_histo(const cv::Mat& image, cv::Mat& hist, int bins, int range_max =
+    256) {
+  int histo_size[] = { bins};
+  float range[] = { 0, (float)range_max};
+  int channels[] = { 0 };
+  const float* ranges[] = { range };
 
-		cv::Point shade = pt + cv::Point(2, 2);
-		int font = cv::FONT_HERSHEY_SIMPLEX;
-		cv::putText(frame, text, shade, font, 0.7, cv::Scalar(0,0,0), 2);
-		cv::putText(frame, text, pt, font, 0.7, cv::Scalar(120, 200,90), 2);
+  cv::calcHist(&image, 1, channels, cv::Mat(), hist, 1, histo_size, ranges);
 }
 
-void test_read_video(const std::string filename) {
-		cv::VideoCapture capture;
-		capture.open(filename);
+void draw_histo(cv::Mat hist, cv::Mat &hist_img, cv::Size size = cv::Size(256,200)) {
+  hist_img = cv::Mat(size, CV_8U, cv::Scalar(255));
+  float bin = (float)hist_img.cols / hist.rows;
+  cv::normalize(hist, hist, 0, hist_img.rows, cv::NORM_MINMAX);
 
-		double frame_rate = capture.get(CV_CAP_PROP_FPS);
-		std::cout << "frame_rate : " << frame_rate << std::endl;
-		int delay = 1000 / frame_rate;
-		int frame_count = 0;
-		cv::Mat frame;
+  for( int i = 0; i < hist.rows; i++ ) {
+    float start_x = i * bin;
+    float end_x = (i+1) * bin;
+    cv::Point2f pt1(start_x, 0);
+    cv::Point2f pt2(end_x, hist.at<float>(i));
 
-		while( capture.read(frame) ) {
-				if(cv::waitKey(delay) >= 0) {
-						break;
-				}
-				put_string(frame, "frame_count ", cv::Point(20,50), frame_count++);
-				cv:imshow("file read ", frame);
-		}
+    if(pt2.y > 0){
+      cv::rectangle(hist_img, pt1, pt2, cv::Scalar(0), -1);
+    }
+  }
+  cv::flip(hist_img, hist_img, 0);
+}
+
+void test_histogram(const std::string filename) {
+  cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE);
+
+  cv::Mat hist;
+  cv::Mat hist_img;
+
+  calc_histo(image, hist, 256);
+  draw_histo(hist, hist_img);
+
+  cv::imshow("image", image);
+  cv::imshow("histogram", hist_img);
+  cv::waitKey();
 }
