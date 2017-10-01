@@ -31,6 +31,9 @@ int main(int argc, char** argv) {
       } else if ( option == "histogram") {
         std::cout << "----------histogram----------" << std::endl;
         test_histogram(filename);
+      } else if ( option == "histogram_strecth") {
+        std::cout << "----------histogram----------" << std::endl;
+        test_stretch_histogram(filename);
       } else if ( option == "image_merge" && argv[3] != nullptr) {
         std::cout << "----------image_merge----------" << std::endl;
         std::string img2_file_name(argv[3]);

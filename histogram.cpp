@@ -3,6 +3,8 @@
 #include <opencv2/opencv.hpp>
 #include "histogram.h"
 
+int search_valueIdx(cv::Mat hist, int bias);
+
 void calc_histo(const cv::Mat& image, cv::Mat& hist, int bins, int range_max =
     256) {
   int histo_size[] = { bins};
@@ -43,4 +45,43 @@ void test_histogram(const std::string filename) {
   cv::imshow("image", image);
   cv::imshow("histogram", hist_img);
   cv::waitKey();
+}
+
+void test_stretch_histogram(const std::string filename) {
+  cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE); 
+  cv::Mat hist, hist_dst, hist_img, hist_dst_img;
+  int histsize = 64;
+  int ranges = 256;
+  calc_histo(image, hist,histsize, ranges);
+
+  float bin_width = (float)ranges / histsize;
+  int low_value = (int)(search_valueIdx(hist, 0) * bin_width);
+  int high_value = (int)(search_valueIdx(hist, hist.rows-1) * bin_width);
+
+  std::cout << "high_value" << high_value << std::endl;
+  std::cout << "low_value" << low_value << std::endl;
+
+  int d_value = high_value - low_value;
+  cv::Mat dst = (image - low_value) * (255.0 / d_value);
+
+  calc_histo(dst, hist_dst, histsize, ranges);
+  draw_histo(hist, hist_img);
+  draw_histo(hist_dst, hist_dst_img); 
+
+  cv::imshow("image", image);
+  cv::imshow("hist_imag", hist_img);
+  cv::imshow("dst", dst);
+  cv::imshow("hist_dst_img", hist_dst_img);
+  cv::waitKey();
+
+}
+
+int search_valueIdx(cv::Mat hist, int bias=0) {
+  for(int i = 0; i < hist.rows; i++) {
+    int idx = cv::abs(bias -i);
+    if(hist.at<float>(idx) > 0) {
+      return idx;
+    }
+  }
+  return -1;
 }
