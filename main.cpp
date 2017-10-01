@@ -7,6 +7,7 @@
 #include "histogram.h"
 #include "image_merge.h"
 #include "deblurring.h"
+#include "image_filter.h"
 
 int main(int argc, char** argv) {
   std::cout << "----------vector----------" << std::endl;
@@ -38,11 +39,16 @@ int main(int argc, char** argv) {
         std::cout << "----------image_merge----------" << std::endl;
         std::string img2_file_name(argv[3]);
         test_image_merge(filename,img2_file_name);
+      } else if ( option == "blurr") {
+        std::cout << "----------blurr----------" << std::endl;
+        ImageFilter::blurr(filename);
+      } else if ( option == "sharpen") {
+        std::cout << "----------blurr----------" << std::endl;
+        ImageFilter::sharpening(filename);
       } else if ( option == "deburr") {
         std::cout << "----------deburr----------" << std::endl;
         deblurring(filename);
       }
-
     }
   }
   return 0;

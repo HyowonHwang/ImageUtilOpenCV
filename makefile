@@ -7,6 +7,7 @@ SRC := main.cpp \
 			read_video.cpp \
 			histogram.cpp \
 			image_merge.cpp \
+			image_filter.cpp \
 			deblurring.cpp \
 			scalar_test.cpp 
 
