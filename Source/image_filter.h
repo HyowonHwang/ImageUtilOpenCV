@@ -7,7 +7,6 @@ class ImageFilter {
   public:
     static void blurr(std::string filename);
     static void sharpening(std::string filename);
-  private:
     static void filter(cv::Mat img, cv::Mat& dst, cv::Mat mask);
 };
 

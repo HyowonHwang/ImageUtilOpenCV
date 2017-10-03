@@ -1,9 +1,6 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 PROJECT (image_util)
 
-# set dir to store library
-SET (BINARY_OUTPUT_PATH ../Build)
-
 find_package(OpenCV REQUIRED)
 
 # set dir for header
@@ -23,6 +20,7 @@ SET (BINSRCS
     histogram.cpp
     image_merge.cpp
     image_filter.cpp
+    edge_detection.cpp
     deblurring.cpp
     scalar_test.cpp
 )

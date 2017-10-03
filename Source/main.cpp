@@ -8,6 +8,7 @@
 #include "image_merge.h"
 #include "deblurring.h"
 #include "image_filter.h"
+#include "edge_detection.h"
 
 int main(int argc, char** argv) {
   std::cout << "----------vector----------" << std::endl;
@@ -45,6 +46,9 @@ int main(int argc, char** argv) {
       } else if ( option == "sharpen") {
         std::cout << "----------blurr----------" << std::endl;
         ImageFilter::sharpening(filename);
+      } else if ( option == "edge_detection") {
+        std::cout << "----------edge detection----------" << std::endl;
+        EdgeDetection::detection(filename);
       } else if ( option == "deburr") {
         std::cout << "----------deburr----------" << std::endl;
         deblurring(filename);
