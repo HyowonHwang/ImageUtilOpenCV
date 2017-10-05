@@ -49,6 +49,9 @@ int main(int argc, char** argv) {
       } else if ( option == "edge_detection") {
         std::cout << "----------edge detection----------" << std::endl;
         EdgeDetection::detection(filename);
+      } else if ( option == "color_edge_detection") {
+        std::cout << "----------edge detection----------" << std::endl;
+        EdgeDetection::color_edge_detection(filename);
       } else if ( option == "deburr") {
         std::cout << "----------deburr----------" << std::endl;
         deblurring(filename);
