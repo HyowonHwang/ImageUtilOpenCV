@@ -22,6 +22,7 @@ SET (BINSRCS
     image_filter.cpp
     edge_detection.cpp
     deblurring.cpp
+    similarity.cpp
     scalar_test.cpp
 )
 

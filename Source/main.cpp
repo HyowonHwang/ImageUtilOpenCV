@@ -9,6 +9,7 @@
 #include "deblurring.h"
 #include "image_filter.h"
 #include "edge_detection.h"
+#include "similarity.h"
 
 int main(int argc, char** argv) {
   std::cout << "----------vector----------" << std::endl;
@@ -55,7 +56,13 @@ int main(int argc, char** argv) {
       } else if ( option == "deburr") {
         std::cout << "----------deburr----------" << std::endl;
         deblurring(filename);
+      } else if ( option == "similarity" && argv[3] != nullptr) {
+        std::cout << "----------similarity----------" << std::endl;
+
+        std::string img2_file_name(argv[3]);
+        Similarity::calc_similarity(filename, img2_file_name);
       }
+
     }
   }
   return 0;
