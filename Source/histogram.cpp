@@ -1,12 +1,10 @@
 #include <iostream>
 #include <string>
-#include <opencv2/opencv.hpp>
 #include "histogram.h"
 
 int search_valueIdx(cv::Mat hist, int bias);
 
-void calc_histo(const cv::Mat& image, cv::Mat& hist, int bins, int range_max =
-    256) {
+void Histogram::calc_histo(const cv::Mat& image, cv::Mat& hist, int bins, int range_max) {
   int histo_size[] = { bins};
   float range[] = { 0, (float)range_max};
   int channels[] = { 0 };
@@ -15,7 +13,23 @@ void calc_histo(const cv::Mat& image, cv::Mat& hist, int bins, int range_max =
   cv::calcHist(&image, 1, channels, cv::Mat(), hist, 1, histo_size, ranges);
 }
 
-void draw_histo(cv::Mat hist, cv::Mat &hist_img, cv::Size size = cv::Size(256,200)) {
+void Histogram::calc_histo2D(const cv::Mat& image, cv::Mat& hist, cv::Vec3i
+    bins, cv::Vec3f ranges_, int dims_) {
+
+  int dims = ( dims_ <= 0) ? image.channels() : dims_;
+  int channels[] = { 0, 1, 2};
+  int histo_size[] = { bins[0], bins[1], bins[2]};
+
+  float range1[] = { 0, ranges_[0]};
+  float range2[] = { 0, ranges_[1]};
+  float range3[] = { 0, ranges_[2]};
+  const float* ranges[] = { range1, range2, range3 };
+
+  cv::calcHist(&image, 1, channels, cv::Mat(), hist, dims, histo_size, ranges);
+  cv::normalize(hist, hist, 0, 1, cv::NORM_MINMAX);
+}
+
+void Histogram::draw_histo(cv::Mat hist, cv::Mat &hist_img, cv::Size size) {
   hist_img = cv::Mat(size, CV_8U, cv::Scalar(255));
   float bin = (float)hist_img.cols / hist.rows;
   cv::normalize(hist, hist, 0, hist_img.rows, cv::NORM_MINMAX);
@@ -33,7 +47,34 @@ void draw_histo(cv::Mat hist, cv::Mat &hist_img, cv::Size size = cv::Size(256,20
   cv::flip(hist_img, hist_img, 0);
 }
 
-void test_histogram(const std::string filename) {
+cv::Mat Histogram::draw_histo2D(cv::Mat hist) {
+  if(hist.dims != 2) {
+    std::cerr << "not 2dimens data" << std::endl;
+  }
+
+  float ratio_value = 512.f;
+  float ratio_hue = 180.f / hist.rows;
+  float ratio_sat = 256.f / hist.cols;
+
+  cv::Mat graph(hist.size(), CV_32FC3);
+  for (int i = 0;  i < hist.rows; i++) {
+    for (int j = 0; j < hist.cols; j++) {
+      float value = hist.at<float>(i, j) * ratio_value;
+      float hue = i * ratio_hue;
+      float sat = j * ratio_sat;
+      graph.at<cv::Vec3f>(i, j) = cv::Vec3f(hue, sat, value);
+    }
+  }
+
+  graph.convertTo(graph, CV_8U);
+  cv::cvtColor(graph, graph, CV_HSV2BGR);
+  cv::resize(graph, graph, cv::Size(0,0), 10, 10, cv::INTER_NEAREST);
+
+  return graph;
+}
+
+
+void Histogram::histogram(const std::string filename) {
   cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE);
 
   cv::Mat hist;
@@ -47,7 +88,7 @@ void test_histogram(const std::string filename) {
   cv::waitKey();
 }
 
-void test_stretch_histogram(const std::string filename) {
+void Histogram::stretch_histogram(const std::string filename) {
   cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE); 
   cv::Mat hist, hist_dst, hist_img, hist_dst_img;
   int histsize = 64;
