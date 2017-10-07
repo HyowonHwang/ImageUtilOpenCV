@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "vector_test.h"
 #include "scalar_test.h"
 #include "mat_operator.h"
@@ -10,6 +11,7 @@
 #include "image_filter.h"
 #include "edge_detection.h"
 #include "similarity.h"
+#include "face_detection.h"
 
 int main(int argc, char** argv) {
   std::cout << "----------vector----------" << std::endl;
@@ -61,7 +63,13 @@ int main(int argc, char** argv) {
 
         std::string img2_file_name(argv[3]);
         Similarity::calc_similarity(filename, img2_file_name);
-      }
+      } else if ( option == "face_detection") {
+        std::cout << "----------face detection----------" << std::endl;
+        std::unique_ptr<FaceDetection> face_detection(new
+          FaceDetection("/home/hwhwangteam/work/opencv/imageUtil/ImageUtilOpenCV/data/haarcascades/",
+            filename));
+        face_detection->detect();
+      } 
 
     }
   }
