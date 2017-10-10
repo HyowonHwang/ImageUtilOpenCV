@@ -65,9 +65,15 @@ int main(int argc, char** argv) {
         Similarity::calc_similarity(filename, img2_file_name);
       } else if ( option == "face_detection") {
         std::cout << "----------face detection----------" << std::endl;
+        /*
         std::unique_ptr<FaceDetection> face_detection(new
           FaceDetection("/home/hwhwangteam/work/opencv/imageUtil/ImageUtilOpenCV/data/haarcascades/",
             filename));
+            */
+        std::unique_ptr<FaceDetection> face_detection(new
+          FaceDetection("/home/hwhwangteam/work/opencv/imageUtil/ImageUtilOpenCV/data/custom/",
+            filename));
+ 
         face_detection->detect();
       } 
 
