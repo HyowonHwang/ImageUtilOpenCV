@@ -12,6 +12,7 @@
 #include "edge_detection.h"
 #include "similarity.h"
 #include "face_detection.h"
+#include "ocr_operation.h"
 
 int main(int argc, char** argv) {
   std::cout << "----------vector----------" << std::endl;
@@ -75,8 +76,11 @@ int main(int argc, char** argv) {
             filename));
  
         face_detection->detect();
+      } else if ( option == "ocr") {
+        std::cout << "----------ocr----------" << std::endl;
+        std::unique_ptr<OcrOperation> ocr_operation(new OcrOperation(filename));
+        ocr_operation->detect();
       } 
-
     }
   }
   return 0;

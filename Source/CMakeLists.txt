@@ -25,6 +25,7 @@ SET (BINSRCS
     similarity.cpp
     face_detection.cpp
     scalar_test.cpp
+    ocr_operation.cpp
 )
 
 ADD_EXECUTABLE (image_util ${BINSRCS})
