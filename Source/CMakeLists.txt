@@ -8,7 +8,11 @@ INCLUDE_DIRECTORIES (.)
 SET(CMAKE_CXX_FLAGS 
     "-ggdb --std=c++11")
 
+SET(TESSERACT_INCLUDE_DIR "/usr/local/include/tesseract")
+SET(Tesseract_LIBS "-L/usr/local/lib -ltesseract -llept")
+
 INCLUDE_DIRECTORIES(${OPENCV_INCLUDE_DIR})
+include_directories(${TESSERACT_INCLUDE_DIR})
 
 # sources
 SET (BINSRCS 
@@ -30,3 +34,4 @@ SET (BINSRCS
 
 ADD_EXECUTABLE (image_util ${BINSRCS})
 TARGET_LINK_LIBRARIES(image_util ${OpenCV_LIBS})
+TARGET_LINK_LIBRARIES(image_util ${Tesseract_LIBS})

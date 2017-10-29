@@ -14,6 +14,7 @@ class OcrOperation {
   private:
     cv::Mat preprocessing(cv::Mat image);
     void find_letters(cv::Mat img, cv::Mat& org_image);
+    void find_string(cv::Mat image); 
 
     std::string path_;
 };
