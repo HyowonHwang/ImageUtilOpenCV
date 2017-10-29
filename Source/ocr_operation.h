@@ -13,7 +13,7 @@ class OcrOperation {
     void detect();
   private:
     cv::Mat preprocessing(cv::Mat image);
-    void find_letters(cv::Mat& img);
+    void find_letters(cv::Mat img, cv::Mat& org_image);
 
     std::string path_;
 };
