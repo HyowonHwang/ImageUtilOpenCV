@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <list>
 #include <opencv2/opencv.hpp>
 #include "image_merge.h"
 
@@ -25,4 +26,10 @@ void test_image_merge(const std::string img1, const std::string img2) {
   cv::imshow("add_imag4", add_img4); 
 
   cv::waitKey(0);
+}
+
+void test_image_concat(const std::list<std::string> file_list) {
+  for(auto file_path : file_list) {
+    std::cout << file_path << std::endl;
+  }
 }

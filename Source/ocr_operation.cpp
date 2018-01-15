@@ -35,13 +35,17 @@ cv::Mat OcrOperation::preprocessing(cv::Mat image) {
 //  cv::blur(gray, gray, cv::Size(5,5));
 //  cv::Canny(gray, gray, 100, 150); 
 //  cv::Sobel(gray, gray, CV_8U, 1, 0, 3);
+  cv::imshow("gray", gray);
 
 //  cv::threshold(gray, th_img, 120, 255, cv::THRESH_BINARY);
   cv::adaptiveThreshold(gray, th_img, 255, cv::ADAPTIVE_THRESH_MEAN_C,
      cv::THRESH_BINARY_INV, 3,12);
+
+  cv::imshow("th_img", th_img);
  // cv::morphologyEx(th_img, th_img, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1, -1), 1);
 // cv::morphologyEx(th_img, th_img, cv::MORPH_CLOSE, kernel);
   cv::morphologyEx(th_img, th_img, cv::MORPH_CLOSE, kernel, cv::Point(-1, -1), 2);
+  cv::imshow("moph_close", th_img);
   return th_img;
 }
 
